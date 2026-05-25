@@ -1,0 +1,23 @@
+name: 'Upstream Sync'
+
+on:
+  schedule:
+    - cron:  '0 0 * * *' # Runs every day at midnight (UTC)
+  workflow_dispatch: # Allows you to run it manually from the Actions tab
+
+jobs:
+  sync_latest_from_upstream:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout target repo
+        uses: actions/checkout@v4
+        with:
+          ref: master # Replace with your default branch name if it's "main"
+
+      - name: Sync upstream changes
+        uses: aormsby/Fork-Sync-With-Upstream-action@v3.4.1
+        with:
+          target_sync_branch: master
+          target_repo_token: ${{ secrets.GITHUB_TOKEN }}
+          upstream_sync_branch: master
+          upstream_sync_repo: CleverRaven/Cataclysm-DDA # Replace with the source repo (e.g., openai/whisper)
